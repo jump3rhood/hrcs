@@ -151,6 +151,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-5">
             {auth.user?.role === 'candidate' && (
               <>
+                <Link to="/candidate/profile" className={navLink('/candidate/profile')}>My Profile</Link>
                 <Link to="/candidate/jobs" className={navLink('/candidate/jobs')}>Browse Jobs</Link>
                 <Link to="/candidate/applications" className={navLink('/candidate/applications')}>My Applications</Link>
                 <Link to="/candidate/notifications" className="relative text-blue-100 hover:text-white transition-colors">
@@ -260,6 +261,7 @@ export default function Navbar() {
           <div className="md:hidden border-t border-blue-800/50 px-2 py-3 space-y-1 bg-[hsl(217,71%,22%)]">
             {auth.user?.role === 'candidate' && (
               <>
+                <Link to="/candidate/profile" className={mobileNavLink('/candidate/profile')}>My Profile</Link>
                 <Link to="/candidate/jobs" className={mobileNavLink('/candidate/jobs')}>Browse Jobs</Link>
                 <Link to="/candidate/applications" className={mobileNavLink('/candidate/applications')}>My Applications</Link>
                 <Link to="/candidate/notifications" className={mobileNavLink('/candidate/notifications')}>

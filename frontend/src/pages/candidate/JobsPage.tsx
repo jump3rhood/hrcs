@@ -42,6 +42,7 @@ export default function CandidateJobsPage() {
   const [search, setSearch] = useState('');
   const [jobType, setJobType] = useState('');
   const [workMode, setWorkMode] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [appliedThisMonth, setAppliedThisMonth] = useState(0);
   const [tipIndex] = useState(() => Math.floor(Math.random() * TIPS.length));
 
@@ -56,6 +57,10 @@ export default function CandidateJobsPage() {
   }, [search, jobType, workMode]);
 
   useEffect(() => { loadJobs(); }, [loadJobs]);
+
+  useEffect(() => {
+    candidateApi.getProfile().then((r) => setFirstName(r.data.firstName)).catch(() => {});
+  }, []);
 
   useEffect(() => {
     candidateApi.getApplications().then((r) => {
@@ -86,6 +91,9 @@ export default function CandidateJobsPage() {
 
   return (
     <div className="space-y-4">
+      {firstName && (
+        <p className="text-muted-foreground text-sm">Hello, <span className="font-semibold text-foreground">{firstName}</span> 👋</p>
+      )}
       <h1 className="text-2xl font-bold text-primary">Browse Jobs</h1>
 
       {/* Filters */}

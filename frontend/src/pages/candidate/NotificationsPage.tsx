@@ -13,13 +13,13 @@ export default function CandidateNotificationsPage() {
     candidateApi.getNotifications().then((r) => setNotifications(r.data as Notification[]));
   }, []);
 
-  const handleClick = async (n: Notification) => {
+  const handleJobInvitationClick = async (n: Notification) => {
     if (!n.isRead) {
       await candidateApi.markNotificationRead(n._id);
       setNotifications((prev) => prev.map((x) => x._id === n._id ? { ...x, isRead: true } : x));
     }
     if (n.jobId) {
-      navigate('/candidate/jobs');
+      navigate(`/candidate/jobs/${n.jobId}`);
     }
   };
 
@@ -30,8 +30,8 @@ export default function CandidateNotificationsPage() {
       {notifications.map((n) => (
         <Card
           key={n._id}
-          className={`cursor-pointer transition-colors ${!n.isRead ? 'border-primary bg-primary/5' : ''}`}
-          onClick={() => handleClick(n)}
+          className={`transition-colors ${n.type === 'job_invitation' ? 'cursor-pointer' : 'cursor-default'} ${!n.isRead ? 'border-primary bg-primary/5' : ''}`}
+          onClick={n.type === 'job_invitation' ? () => handleJobInvitationClick(n) : undefined}
         >
           <CardHeader className="py-3">
             <div className="flex items-center justify-between">
