@@ -52,7 +52,7 @@ export default function EmployerNotificationsPage() {
           onClick={() => handleClick(n)}
           className={`cursor-pointer transition-all hover:shadow-md ${
             !n.isRead
-              ? 'border-[hsl(214,80%,52%)]/40 bg-[hsl(214,80%,52%)]/5'
+              ? 'border-accent/40 bg-accent/5'
               : ''
           }`}
         >
@@ -76,7 +76,7 @@ export default function EmployerNotificationsPage() {
                 })}
               </p>
               {n.jobId && (
-                <span className="text-xs text-[hsl(214,80%,52%)] font-medium">View job →</span>
+                <span className="text-xs text-accent font-medium">View job →</span>
               )}
             </div>
           </CardContent>

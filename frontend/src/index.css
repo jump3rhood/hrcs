@@ -66,3 +66,53 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ── Portal-specific colour themes ── */
+
+/* Candidate: existing dark ocean blue (default) */
+.portal-candidate {
+  --primary: 217 71% 25%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 214 80% 52%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 214 80% 52%;
+  --secondary: 214 100% 97%;
+  --secondary-foreground: 217 71% 25%;
+  --border: 214 32% 88%;
+  --input: 214 32% 88%;
+  --nav-bg: hsl(217, 71%, 25%);
+  --nav-bg-dark: hsl(217, 71%, 22%);
+  --portal-hero-bg: hsl(217, 71%, 15%);
+}
+
+/* Employer: dark forest green — growth, business success */
+.portal-employer {
+  --primary: 142 60% 22%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 142 52% 40%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 142 52% 40%;
+  --secondary: 142 55% 96%;
+  --secondary-foreground: 142 60% 22%;
+  --border: 142 22% 85%;
+  --input: 142 22% 85%;
+  --nav-bg: hsl(142, 60%, 22%);
+  --nav-bg-dark: hsl(142, 60%, 18%);
+  --portal-hero-bg: hsl(142, 60%, 14%);
+}
+
+/* Admin: dark violet — authority, system control */
+.portal-admin {
+  --primary: 262 52% 28%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 262 45% 50%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 262 45% 50%;
+  --secondary: 262 55% 97%;
+  --secondary-foreground: 262 52% 28%;
+  --border: 262 20% 85%;
+  --input: 262 20% 85%;
+  --nav-bg: hsl(262, 52%, 28%);
+  --nav-bg-dark: hsl(262, 52%, 22%);
+  --portal-hero-bg: hsl(262, 52%, 18%);
+}

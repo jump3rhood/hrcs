@@ -128,20 +128,20 @@ export default function Navbar() {
   const navLink = (path: string) =>
     location.pathname.startsWith(path)
       ? 'text-sm text-white font-semibold underline underline-offset-4 decoration-white/50'
-      : 'text-sm text-blue-100 hover:text-white transition-colors';
+      : 'text-sm text-white/70 hover:text-white transition-colors';
 
   const mobileNavLink = (path: string) =>
     `block px-4 py-2.5 text-sm rounded-md transition-colors ${
       location.pathname.startsWith(path)
         ? 'bg-white/15 text-white font-semibold'
-        : 'text-blue-100 hover:text-white hover:bg-blue-800/50'
+        : 'text-white/70 hover:text-white hover:bg-white/15'
     }`;
 
   const isAuthPage = ['/login', '/register', '/admin/login'].includes(location.pathname);
 
   return (
     <>
-      <nav className="border-b border-blue-900/30 bg-[hsl(217,71%,25%)] relative">
+      <nav className="border-b border-white/10 bg-[var(--nav-bg)] relative">
         <div className="px-4 sm:px-6 py-3 flex items-center justify-between">
           <Link to={roleHome()} className="text-xl font-bold text-white">
             BRI HR Portal
@@ -154,7 +154,7 @@ export default function Navbar() {
                 <Link to="/candidate/profile" className={navLink('/candidate/profile')}>My Profile</Link>
                 <Link to="/candidate/jobs" className={navLink('/candidate/jobs')}>Browse Jobs</Link>
                 <Link to="/candidate/applications" className={navLink('/candidate/applications')}>My Applications</Link>
-                <Link to="/candidate/notifications" className="relative text-blue-100 hover:text-white transition-colors">
+                <Link to="/candidate/notifications" className="relative text-white/70 hover:text-white transition-colors">
                   <Bell className="h-5 w-5" />
                   {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center leading-none">
@@ -173,7 +173,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={openEmployerDropdown}
-                    className="relative text-blue-100 hover:text-white transition-colors"
+                    className="relative text-white/70 hover:text-white transition-colors"
                     aria-label="Notifications"
                   >
                     <Bell className="h-5 w-5" />
@@ -191,7 +191,7 @@ export default function Navbar() {
                         <Link
                           to="/employer/notifications"
                           onClick={() => setEmployerDropdownOpen(false)}
-                          className="text-xs text-[hsl(214,80%,52%)] hover:underline"
+                          className="text-xs text-accent hover:underline"
                         >
                           View all
                         </Link>
@@ -240,7 +240,7 @@ export default function Navbar() {
               </Button>
             ) : !isAuthPage ? (
               <Link to="/login">
-                <Button size="sm" className="bg-white text-[hsl(217,71%,25%)] hover:bg-blue-50">Login</Button>
+                <Button size="sm" className="bg-white text-primary hover:bg-white/90">Login</Button>
               </Link>
             ) : null}
           </div>
@@ -248,7 +248,7 @@ export default function Navbar() {
           {/* Mobile hamburger */}
           <button
             type="button"
-            className="md:hidden p-1.5 text-blue-100 hover:text-white transition-colors"
+            className="md:hidden p-1.5 text-white/70 hover:text-white transition-colors"
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-label="Toggle navigation menu"
           >
@@ -258,7 +258,7 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div className="md:hidden border-t border-blue-800/50 px-2 py-3 space-y-1 bg-[hsl(217,71%,22%)]">
+          <div className="md:hidden border-t border-white/15 px-2 py-3 space-y-1 bg-[var(--nav-bg-dark)]">
             {auth.user?.role === 'candidate' && (
               <>
                 <Link to="/candidate/profile" className={mobileNavLink('/candidate/profile')}>My Profile</Link>
@@ -305,7 +305,7 @@ export default function Navbar() {
                 </Button>
               ) : !isAuthPage ? (
                 <Link to="/login" className="block">
-                  <Button size="sm" className="w-full bg-white text-[hsl(217,71%,25%)] hover:bg-blue-50">Login</Button>
+                  <Button size="sm" className="w-full bg-white text-primary hover:bg-white/90">Login</Button>
                 </Link>
               ) : null}
             </div>
@@ -319,7 +319,7 @@ export default function Navbar() {
           {popupNotifications.map((n) => (
             <div
               key={n._id}
-              className="pointer-events-auto bg-background border border-[hsl(214,80%,52%)]/30 rounded-lg shadow-xl p-4"
+              className="pointer-events-auto bg-background border border-accent/30 rounded-lg shadow-xl p-4"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-2 min-w-0">
@@ -342,7 +342,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => { dismissPopup(n._id); navigate('/candidate/notifications'); }}
-                  className="text-xs text-[hsl(214,80%,52%)] hover:underline font-medium"
+                  className="text-xs text-accent hover:underline font-medium"
                 >
                   View all notifications →
                 </button>

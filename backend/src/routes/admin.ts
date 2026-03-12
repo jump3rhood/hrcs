@@ -7,6 +7,7 @@ import Job from '../models/Job';
 import {
   getCandidates,
   getCandidateById,
+  getCandidateApplications,
   getJobApplications,
   getMatchedCandidates,
   sendJobNotifications,
@@ -21,6 +22,7 @@ const router = Router();
 router.use(authenticate, requireRole('admin'));
 
 router.get('/candidates', getCandidates);
+router.get('/candidates/:id/applications', getCandidateApplications);
 router.get('/candidates/:id', getCandidateById);
 router.get('/all-jobs', async (_req, res) => {
   const jobs = await Job.find({ status: 'published' }).populate('employer', 'companyName').sort({ createdAt: -1 });

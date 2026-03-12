@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, MapPin, Briefcase, Monitor, Clock, Building2, Globe, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, MapPin, Briefcase, Monitor, Clock, Building2, Globe, CheckCircle2, XCircle, TrendingUp } from 'lucide-react';
 
 interface JobDetail {
   _id: string;
@@ -28,12 +28,20 @@ export default function JobDetailPage() {
   const { jobId } = useParams<{ jobId: string }>();
   const { toast } = useToast();
   const [job, setJob] = useState<JobDetail | null>(null);
+  const [candidateSkills, setCandidateSkills] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!jobId) return;
-    candidateApi.getJob(jobId)
-      .then((r) => setJob(r.data as JobDetail))
+    Promise.all([
+      candidateApi.getJob(jobId),
+      candidateApi.getProfile(),
+    ])
+      .then(([jobRes, profileRes]) => {
+        setJob(jobRes.data as JobDetail);
+        const profile = profileRes.data as { skills?: { skillName: string }[] };
+        setCandidateSkills(profile.skills?.map((s) => s.skillName.toLowerCase()) ?? []);
+      })
       .catch(() => toast({ title: 'Error', description: 'Failed to load job', variant: 'destructive' }))
       .finally(() => setLoading(false));
   }, [jobId, toast]);
@@ -161,6 +169,72 @@ export default function JobDetailPage() {
               </CardContent>
             </Card>
           )}
+
+          {/* Skill Gap Analysis */}
+          {(() => {
+            const requiredSkills = job.skills.filter((s) => s.required);
+            if (requiredSkills.length === 0) return null;
+            const matchedSkills = requiredSkills.filter((s) =>
+              candidateSkills.includes(s.skillName.toLowerCase())
+            );
+            const missingSkills = requiredSkills.filter((s) =>
+              !candidateSkills.includes(s.skillName.toLowerCase())
+            );
+            return (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                    <h2 className="text-lg font-semibold text-primary">Skill Match Breakdown</h2>
+                    <span className="ml-auto text-sm font-semibold text-primary">
+                      {matchedSkills.length}/{requiredSkills.length} required skills
+                    </span>
+                  </div>
+
+                  {matchedSkills.length > 0 && (
+                    <div className="mb-4">
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-green-700 mb-2">
+                        Skills You Have ({matchedSkills.length})
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {matchedSkills.map((s) => (
+                          <span
+                            key={s.skillName}
+                            className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium bg-green-50 text-green-700 border border-green-200"
+                          >
+                            <CheckCircle2 className="h-3 w-3" />
+                            {s.skillName}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {missingSkills.length > 0 && (
+                    <div>
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-red-600 mb-2">
+                        Skills to Improve Your Match ({missingSkills.length})
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {missingSkills.map((s) => (
+                          <span
+                            key={s.skillName}
+                            className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium bg-red-50 text-red-600 border border-red-200"
+                          >
+                            <XCircle className="h-3 w-3" />
+                            {s.skillName}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-3">
+                        Add these skills to your profile to increase your match score.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })()}
         </div>
 
         {/* Sidebar */}

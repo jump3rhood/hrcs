@@ -20,6 +20,7 @@ import EmployerJobFormPage from './pages/employer/JobFormPage';
 import EmployerShortlistPage from './pages/employer/ShortlistPage';
 
 import AdminCandidatesPage from './pages/admin/CandidatesPage';
+import AdminCandidateDetailPage from './pages/admin/CandidateDetailPage';
 import AdminJobsPage from './pages/admin/JobsPage';
 import AdminShortlistPage from './pages/admin/ShortlistPage';
 import AdminSendNotificationsPage from './pages/admin/SendNotificationsPage';
@@ -62,6 +63,7 @@ export default function App() {
         {/* Admin routes */}
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route path="/admin/candidates" element={<AdminCandidatesPage />} />
+          <Route path="/admin/candidates/:candidateId" element={<AdminCandidateDetailPage />} />
           <Route path="/admin/jobs" element={<AdminJobsPage />} />
           <Route path="/admin/jobs/:jobId/applications" element={<AdminJobApplicationsPage />} />
           <Route path="/admin/jobs/:jobId/shortlist" element={<AdminShortlistPage />} />

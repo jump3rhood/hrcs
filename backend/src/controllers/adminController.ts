@@ -189,6 +189,14 @@ export const createShortlist = async (req: AuthRequest, res: Response): Promise<
   res.status(201).json(shortlist);
 };
 
+// GET /api/admin/candidates/:id/applications
+export const getCandidateApplications = async (req: Request, res: Response): Promise<void> => {
+  const applications = await Application.find({ candidate: req.params.id })
+    .populate({ path: 'job', populate: { path: 'employer', select: 'companyName' } })
+    .sort({ createdAt: -1 });
+  res.json(applications);
+};
+
 // GET /api/admin/candidates/:id
 export const getCandidateById = async (req: Request, res: Response): Promise<void> => {
   const candidate = await Candidate.findById(req.params.id).populate('user', 'email');

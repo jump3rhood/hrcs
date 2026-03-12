@@ -8,11 +8,11 @@ import { Separator } from '@/components/ui/separator';
 import {
   Users, X, MapPin, Star, Briefcase, Mail, Phone, Github, User,
   ChevronRight, ArrowLeft, Building2, Clock, CheckCircle2, ListChecks,
-  Send, ClipboardList,
+  Send, ClipboardList, UserSearch,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-interface JobFull extends Job {
+interface JobFull extends Omit<Job, 'employer'> {
   employer?: { _id: string; companyName: string };
 }
 
@@ -220,6 +220,11 @@ export default function AdminJobsPage() {
 
                 {/* Admin actions */}
                 <div className="flex gap-2 flex-wrap pt-1">
+                  <Button size="sm" variant="default" className="h-8 text-xs" asChild>
+                    <Link to={`/admin/jobs/${selectedJob._id}/applications`}>
+                      <UserSearch className="h-3.5 w-3.5 mr-1.5" />Matched Candidates
+                    </Link>
+                  </Button>
                   <Button size="sm" variant="outline" className="h-8 text-xs" asChild>
                     <Link to={`/admin/jobs/${selectedJob._id}/shortlist`}>
                       <ListChecks className="h-3.5 w-3.5 mr-1.5" />Manage Shortlist

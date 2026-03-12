@@ -19,4 +19,6 @@ export const adminApi = {
   getShortlist: (jobId: string) => api.get(`/admin/shortlists/${jobId}`),
   shareProfile: (jobId: string, candidateId: string) =>
     api.post('/admin/share-profile', { jobId, candidateId }),
+  getCandidateApplications: (candidateId: string) =>
+    api.get(`/admin/candidates/${candidateId}/applications`),
 };
