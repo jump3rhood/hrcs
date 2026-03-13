@@ -13,6 +13,9 @@ import adminRoutes from './routes/admin'
 
 const app = express()
 
+// Trust the first proxy (required on Vercel/serverless for express-rate-limit)
+app.set('trust proxy', 1)
+
 // In production the frontend is served from the same origin — no CORS needed.
 // In development the Vite dev server runs on a different port, so allow it.
 if (process.env.NODE_ENV !== 'production') {
@@ -29,7 +32,10 @@ app.use(
   rateLimit({
     windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 900000,
     max: Number(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
-    skip: () => process.env.NODE_ENV === 'development',
+    // Skip in development; also skip on Vercel where serverless functions have
+    // no persistent memory, making in-process rate limiting ineffective.
+    skip: () => process.env.NODE_ENV === 'development' || !!process.env.VERCEL,
+    validate: { xForwardedForHeader: false },
   }),
 )
 
