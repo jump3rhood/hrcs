@@ -2,7 +2,6 @@ import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
-import rateLimit from 'express-rate-limit'
 import path from 'path'
 import { connectDB } from './config/db'
 
@@ -19,25 +18,17 @@ app.set('trust proxy', 1)
 // In production the frontend is served from the same origin — no CORS needed.
 // In development the Vite dev server runs on a different port, so allow it.
 if (process.env.NODE_ENV !== 'production') {
-  app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    credentials: true,
-  }))
+  app.use(
+    cors({
+      origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+      credentials: true,
+    }),
+  )
 }
 
 // Disable CSP so Vite-bundled inline scripts are not blocked
 app.use(helmet({ contentSecurityPolicy: false }))
 app.use(express.json())
-app.use(
-  rateLimit({
-    windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 900000,
-    max: Number(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
-    // Skip in development; also skip on Vercel where serverless functions have
-    // no persistent memory, making in-process rate limiting ineffective.
-    skip: () => process.env.NODE_ENV === 'development' || !!process.env.VERCEL,
-    validate: { xForwardedForHeader: false },
-  }),
-)
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }))
 app.use('/api/auth', authRoutes)
@@ -50,16 +41,22 @@ if (process.env.NODE_ENV === 'production') {
   const frontendDist = path.join(__dirname, '../../frontend/dist')
   app.use(express.static(frontendDist))
   // React Router catch-all — must be last
-  app.get('*', (_req, res) => res.sendFile(path.join(frontendDist, 'index.html')))
+  app.get('*', (_req, res) =>
+    res.sendFile(path.join(frontendDist, 'index.html')),
+  )
 }
 
 const PORT = process.env.PORT || 5000
 
 if (process.env.NODE_ENV === 'production') {
-  const missing = ['MONGODB_URI', 'JWT_SECRET'].filter(v => !process.env[v])
-  if (missing.length) { console.error('Missing required env vars:', missing.join(', ')); process.exit(1) }
+  const missing = ['MONGODB_URI', 'JWT_SECRET'].filter((v) => !process.env[v])
+  if (missing.length) {
+    console.error('Missing required env vars:', missing.join(', '))
+    process.exit(1)
+  }
   if (process.env.JWT_SECRET === 'change-this-super-secret-key-in-production') {
-    console.error('JWT_SECRET must be changed in production'); process.exit(1)
+    console.error('JWT_SECRET must be changed in production')
+    process.exit(1)
   }
 }
 
