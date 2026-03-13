@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "NODE_ENV=production node dist/index.js",
     "seed": "ts-node-dev --transpile-only src/seed.ts",
-    "seed:admin": "ts-node-dev --transpile-only src/seedAdmin.ts"
+    "seed:admin": "ts-node-dev --transpile-only src/seedAdmin.ts",
+    "build:predeploy": "cd ../frontend && npm install --include=dev && npm run build && cp -r dist ../backend/ && cd ../backend && npm run build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
